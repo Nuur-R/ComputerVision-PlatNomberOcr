@@ -1,21 +1,23 @@
 import easyocr
+import os
 
 def perform_ocr(image_path, language='en'):
-    # Inisialisasi OCR
-    reader = easyocr.Reader([language])
+    while True:
+        # Inisialisasi OCR
+        reader = easyocr.Reader([language])
+        
+        # Gunakan OCR untuk mengenali teks pada gambar
+        results = reader.readtext(image_path)
+        
+        detected_text = []
+        for (bbox, text, prob) in results:
+            detected_text.append(text)
+        
+        # Write detected text to data.csv
+        with open('data.csv', 'w') as f:
+            f.write(''.join(detected_text))
     
-    # Gunakan OCR untuk mengenali teks pada gambar
-    results = reader.readtext(image_path)
-    
-    detected_text = []
-    for (bbox, text, prob) in results:
-        detected_text.append(text)
-    
-    return detected_text
-
 # # Contoh pemanggilan fungsi
-# image_path = 'plat/gambar1.jpg'
+# image_path = 'OIP.jpeg'
 # detected_text = perform_ocr(image_path)
-
-# for text in detected_text:
-#     print(text)
+# print(detected_text)
