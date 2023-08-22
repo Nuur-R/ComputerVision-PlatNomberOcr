@@ -3,6 +3,7 @@ import pytesseract
 import csv
 from datetime import datetime
 from tele import sendToTelegram
+import os
 class PlateDetector:
     def __init__(self, cascade_path):
         self.plate_cascade = cv2.CascadeClassifier(cascade_path)
@@ -27,7 +28,7 @@ def save_to_csv(data):
         writer.writerow(data)
         
 # Buka video dari webcam
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture('1.mp4')
 
 # Inisialisasi kelas
 plate_detector = PlateDetector('haarcascade_russian_plate_number_mod.xml')
@@ -47,7 +48,12 @@ while True:
         if detected_text.strip():
             cv2.putText(frame, detected_text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
             save_to_csv([datetime.now().strftime('%Y-%m-%d %H:%M:%S'),detected_text])
-            image_path = str('plate/plate-{}-{}.jpg'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), detected_text))
+            image_path = str('gambar/plate-{}-{}.jpg'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), detected_text))
+            # check image_path if not exist then create new one
+            directory = os.path.dirname(image_path)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            
             cv2.imwrite(image_path, plate_img)
             # convert detected_text to string
             detected_text = str(detected_text)

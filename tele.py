@@ -21,7 +21,8 @@ async def send_photo_to_user(token, chat_id, photo_path, caption=None):
 def sendToTelegram(text, photo_path):
     try:
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(send_photo_to_user(API_KEY, CHAT_ID, photo_path, text))
+        # loop.run_until_complete(send_photo_to_user(API_KEY, CHAT_ID, photo_path, text))
+        loop.run_until_complete(send_text_message(CHAT_ID, text))
         print('Pesan foto berhasil dikirim ke obrolan dengan ID:', CHAT_ID)
         
     except Exception as e:
